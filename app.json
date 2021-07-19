@@ -1,0 +1,8 @@
+{
+    "name": "ft-builder",
+    "options": {
+        "allow-unauthenticated": true,
+        "memory": "4Gi",
+        "platform":"managed"
+    }
+}

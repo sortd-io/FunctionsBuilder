@@ -38,7 +38,7 @@ app.post("/", jsonParser, async (req: any, res: any) => {
     });
     return;
   }
-  console.log(`ENV:${JSON.stringify(process.env)}`)
+  
   try {
     const decodedToken = await auth.verifyIdToken(userToken);
     const uid = decodedToken.uid;
