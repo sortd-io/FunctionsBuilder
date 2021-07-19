@@ -97,29 +97,10 @@ app.post("/", jsonParser, async (req: any, res: any) => {
   }
   await streamLogger.info("generateConfig success");
 
-  let hasEnvError = false;
 
-  if (!process.env._PROJECT_ID) {
-    await logErrorToDB(
-      {
-        errorDescription: `Invalid env: _PROJECT_ID (${process.env._PROJECT_ID})`,
-        user,
-      },
-      streamLogger
-    );
-    hasEnvError = true;
-  }
-
-  if (hasEnvError) {
-    await streamLogger.error("Invalid env:_PROJECT_ID");
-    await streamLogger.fail();
-    res.send({
-      success: false,
-      reason: "Invalid env:_PROJECT_ID",
-    });
-    return;
-  }
-
+  // get gcp project id from metadata
+  const projectId = (await axiosInstance.get('computeMetadata/v1/project/project-id')).data
+  console.log(`deploying to ${projectId}`);
   await asyncExecute(
     `cd build/functions; \
      yarn install`,
@@ -129,7 +110,7 @@ app.post("/", jsonParser, async (req: any, res: any) => {
   await asyncExecute(
     `cd build/functions; \
        yarn deployFT \
-        --project ${process.env._PROJECT_ID} \
+        --project ${projectId} \
         --only functions`,
     commandErrorHandler({ user }, streamLogger)
   );
