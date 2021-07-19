@@ -3,5 +3,12 @@
     "options": {
         "allow-unauthenticated": true,
         "memory": "4Gi"
+    },
+    "hooks": {
+        "postcreate": {
+            "commands": [
+                "ts-node ./done.ts"
+            ]
+        }
     }
 }
