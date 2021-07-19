@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const axios = require('axios');
 const cors = require("cors");
 import { asyncExecute } from "./compiler/terminal";
 import { createStreamLogger } from "./utils";
@@ -14,8 +15,15 @@ const jsonParser = bodyParser.json();
 
 app.use(cors());
 
+const axiosInstance = axios.create({
+  baseURL: 'http://metadata.google.internal/',
+  timeout: 1000,
+  headers: {'Metadata-Flavor': 'Google'}
+});
+
 app.get("/", async (req: any, res: any) => {
-  res.send(`Firetable cloud function builder version ${meta.version}`);
+ const resp = await axiosInstance.get('computeMetadata/v1/project/project-id')
+  res.send(`Firetable cloud function builder version ${meta.version}: running on ${resp.data}`);
 });
 
 app.post("/", jsonParser, async (req: any, res: any) => {
