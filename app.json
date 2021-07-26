@@ -7,12 +7,12 @@
     "hooks": {
         "prebuild": {
             "commands": [
-                "node hooks/prebuild"
+                "cd hooks && yarn install && node prebuild"
             ]
         },
         "postcreate": {
             "commands": [
-                "node hooks/postcreate"
+                "cd hooks && node postcreate"
             ]
         }
     }
