@@ -5,9 +5,14 @@
         "memory": "4Gi"
     },
     "hooks": {
+        "prebuild": {
+            "commands": [
+                "node hooks/prebuild"
+            ]
+        },
         "postcreate": {
             "commands": [
-                "ts-node ./done.ts"
+                "node hooks/postcreate"
             ]
         }
     }
